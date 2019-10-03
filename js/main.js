@@ -1,61 +1,5 @@
 "use strict";
 
-//db connections
-var initTable = function () {
-	const db = openDatabase(
-		'applicants',
-		'1.0',
-		'ApplicantsDb',
-		10*1024*1024
-	);
-	db.transaction(function(trx){
-		trx.executeSql('CREATE TABLE IF NOT EXISTS PERSONAL_INFO (id INTEGER PRIMARY KEY, name, phone, telegram, role, prize)');
-	});
-	return db;
-};
-
-var getCurrentUserId = function (data) {
-	const db = initTable();
-
-	return new Promise(function(resolved) {
-		db.transaction(function(trx){
-			trx.executeSql('SELECT max(id) FROM PERSONAL_INFO', [], function(tx, result){
-				resolved(result.rows[0]['max(id)']);
-			});
-		});
-	});
-};
-
-var validateTelegram = function (data) {
-	const db = initTable();
-
-	return new Promise(function(resolved, rejected) {
-		db.transaction(function(trx){
-			trx.executeSql(`SELECT * FROM PERSONAL_INFO WHERE telegram="${data.telegram}"`, [], function(tx, result){
-				result.rows.length === 0 ? resolved(data) : rejected(`Telegram already exists`);
-			});
-		});
-	});
-};
-
-var insertNewUser = function (data) {
-	const db = initTable();
-	console.log('\n\ndata.name', data.name,'\n\n');
-	return new Promise(resolved => {
-		db.transaction(
-			function(trx){
-				trx.executeSql(`INSERT INTO PERSONAL_INFO (name, phone, telegram, role, prize)
-                VALUES ("${data.name}", "${data.phone}", "${data.telegram}", "${data.role}", "")`)
-			},
-			[],
-			function () {resolved(true);}
-		);
-	})
-	// db.transaction(function(trx){
-	//   trx.executeSql(`DROP TABLE PERSONAL_INFO`)
-	// });
-
-};
 
 var App = function () {
   "use strict";
@@ -86,7 +30,79 @@ var App = function () {
     }
   };
 
-  function testPrizes(prizes) {
+	//db connections
+	var initTables = function () {
+		const db = openDatabase(
+			'applicants',
+			'1.0',
+			'ApplicantsDb',
+			10*1024*1024
+		);
+		db.transaction(function(trx){
+			trx.executeSql('CREATE TABLE IF NOT EXISTS PERSONAL_INFO (id INTEGER PRIMARY KEY, name, phone, telegram, role, prize)');
+		});
+		return db;
+	};
+	var initTables = function () {
+		const db = openDatabase(
+			'applicants',
+			'1.0',
+			'ApplicantsDb',
+			10*1024*1024
+		);
+		db.transaction(function(trx){
+			trx.executeSql('CREATE TABLE IF NOT EXISTS PERSONAL_INFO (id INTEGER PRIMARY KEY, name, phone, telegram, role, prize)');
+		});
+		// db.transaction(function(trx){
+		// 	trx.executeSql('CREATE TABLE IF NOT EXISTS PRIZE_LIST (name unique, INTEGER amount)');
+		// });
+		return db;
+	};
+
+	var getCurrentUserId = function (data) {
+		const db = initTables();
+
+		return new Promise(function(resolved) {
+			db.transaction(function(trx){
+				trx.executeSql('SELECT max(id) FROM PERSONAL_INFO', [], function(tx, result){
+					resolved(result.rows[0]['max(id)']);
+				});
+			});
+		});
+	};
+
+	var validateTelegram = function (data) {
+		const db = initTables();
+
+		return new Promise(function(resolved, rejected) {
+			db.transaction(function(trx){
+				trx.executeSql(`SELECT * FROM PERSONAL_INFO WHERE telegram="${data.telegram}"`, [], function(tx, result){
+					result.rows.length === 0 ? resolved(data) : rejected(`Telegram already exists`);
+				});
+			});
+		});
+	};
+
+
+	var insertNewUser = function (data) {
+		const db = initTables();
+		console.log('\n\ndata.name', data.name,'\n\n');
+		return new Promise(resolved => {
+			db.transaction(
+				function(trx){
+					trx.executeSql(`INSERT INTO PERSONAL_INFO (name, phone, telegram, role, prize)
+                VALUES ("${'fsad'}", "${'fsad'}", "${'fsad'}", "${'fadsas'}", "")`)
+                // VALUES ("${data.name}", "${data.phone}", "${data.telegram}", "${data.role}", "")`)
+				},
+				[],
+				function () {resolved(true);}
+			);
+		})
+
+	};
+
+
+	function testPrizes(prizes) {
     for (var i = 0; i < prizes.length; i++) {
       var prize = prizes[i];
 
@@ -107,36 +123,47 @@ var App = function () {
     var amount = prizes[random].count;
 
     if (amount > 0) {
-      return random;
+	    prizes[random].count = prizes[random].count - 1;
+	    return random;
     } else {
       return testPrizes(prizes) && getRandomPrize(prizes);
     }
   };
+  var removePrizeFromCount = function getRandomPrize(prizes) {
+	  var random = randomNumberInRange(0, prizes.length - 1);
+	  var amount = prizes[random].count;
+
+	  if (amount > 0) {
+		  return random;
+	  } else {
+		  return testPrizes(prizes) && getRandomPrize(prizes);
+	  }
+  };
 
   var prizes = [{
-    count: 5,
-    type: "Рюкзак Everad"
-  }, {
-    count: 10,
-    type: "Термокружки Everad"
-  }, {
     count: 30,
-    type: "USB браслет Everad"
+    type: "Термокружка"
   }, {
     count: 5,
-    type: "Powerbank Everad"
-  }, {
-    count: 40,
-    type: "Значки от Affhub"
+    type: "Porsche на радиоуправлении"
   }, {
     count: 10,
-    type: "Ветровка от Affhub"
+    type: "Power Bank"
   }, {
-    count: 30,
-    type: "USB зажигалка Affhub"
+    count: 130,
+    type: "Стикер-салфетка для экрана и камеры"
   }, {
-    count: 10,
-    type: "Пуловер Affhub"
+    count: 160,
+    type: "Блокнот"
+  }, {
+    count: 150,
+    type: "Значок"
+  }, {
+    count: 200,
+    type: "Набор стикеров"
+  }, {
+    count: 200,
+    type: "Обнимашки"
   }];
   return {
     labelFormActive: function labelFormActive() {
@@ -165,6 +192,12 @@ var App = function () {
             var value = item[1];
             ajaxData[name] = value;
           }
+	        insertNewUser(ajaxData).then(getCurrentUserId).then(data => {
+	        	console.log('\n\ndata', data,'\n\n');
+		        var id_field = $("#wheel__user-id");
+		        id_field.html(`#${ 10000 + data }`);
+	        });
+	        //insert id to [FE]
 
           $('#form').hide();
           $('.wheel__info').show();
@@ -266,7 +299,7 @@ var App = function () {
       return filteredErrors;
     },
     startGame: function startGame() {
-      startBtn.click(function (e) {
+      startBtn.click(async function (e) {
         e.preventDefault();
         formBlock.hide();
         wheelBlock.show();
@@ -274,17 +307,34 @@ var App = function () {
         var number = getRandomPrize(prizes);
         var spinCount = randomNumberInRange(2, 4);
         var deg = (number - 1) * 45 - 45 + 22.5 + spinCount * 360;
-        pieAmin.animate({
-          textIndent: -deg
-        }, {
-          duration: spinCount * 1000,
-          step: function step(now, fx) {
-            $(this).css("transform", "rotate(".concat(now, "deg)"));
-          },
-          complete: function complete() {
-            $('.main').addClass('animate');
-          }
+        getCurrentUserId().then(data => {
+          $('#your_id-span').html(`#${ 10000 + data }`);
+	        pieAmin.animate({
+		        textIndent: -deg
+	        }, {
+		        duration: spinCount * 1000,
+		        step: function step(now, fx) {
+			        $(this).css("transform", "rotate(".concat(now, "deg)"));
+		        },
+		        complete: function complete() {
+			        $('.main').addClass('animate');
+		        }
+	        });
+	        $('#prise__user').html(prizes[number].type)
+        }).catch(() => {
+	        pieAmin.animate({
+		        textIndent: -deg
+	        }, {
+		        duration: spinCount * 1000,
+		        step: function step(now, fx) {
+			        $(this).css("transform", "rotate(".concat(now, "deg)"));
+		        },
+		        complete: function complete() {
+			        $('.main').addClass('animate');
+		        }
+	        });
         });
+
       });
     },
     anewStartGame: function anewStartGame() {
