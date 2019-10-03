@@ -1,5 +1,62 @@
 "use strict";
 
+//db connections
+var initTable = function () {
+	const db = openDatabase(
+		'applicants',
+		'1.0',
+		'ApplicantsDb',
+		10*1024*1024
+	);
+	db.transaction(function(trx){
+		trx.executeSql('CREATE TABLE IF NOT EXISTS PERSONAL_INFO (id INTEGER PRIMARY KEY, name, phone, telegram, role, prize)');
+	});
+	return db;
+};
+
+var getCurrentUserId = function (data) {
+	const db = initTable();
+
+	return new Promise(function(resolved) {
+		db.transaction(function(trx){
+			trx.executeSql('SELECT max(id) FROM PERSONAL_INFO', [], function(tx, result){
+				resolved(result.rows[0]['max(id)']);
+			});
+		});
+	});
+};
+
+var validateTelegram = function (data) {
+	const db = initTable();
+
+	return new Promise(function(resolved, rejected) {
+		db.transaction(function(trx){
+			trx.executeSql(`SELECT * FROM PERSONAL_INFO WHERE telegram="${data.telegram}"`, [], function(tx, result){
+				result.rows.length === 0 ? resolved(data) : rejected(`Telegram already exists`);
+			});
+		});
+	});
+};
+
+var insertNewUser = function (data) {
+	const db = initTable();
+	console.log('\n\ndata.name', data.name,'\n\n');
+	return new Promise(resolved => {
+		db.transaction(
+			function(trx){
+				trx.executeSql(`INSERT INTO PERSONAL_INFO (name, phone, telegram, role, prize)
+                VALUES ("${data.name}", "${data.phone}", "${data.telegram}", "${data.role}", "")`)
+			},
+			[],
+			function () {resolved(true);}
+		);
+	})
+	// db.transaction(function(trx){
+	//   trx.executeSql(`DROP TABLE PERSONAL_INFO`)
+	// });
+
+};
+
 var App = function () {
   "use strict";
 
