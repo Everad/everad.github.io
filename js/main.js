@@ -43,23 +43,9 @@ var App = function () {
 		});
 		return db;
 	};
-	var initTables = function () {
-		const db = openDatabase(
-			'applicants',
-			'1.0',
-			'ApplicantsDb',
-			10*1024*1024
-		);
-		db.transaction(function(trx){
-			trx.executeSql('CREATE TABLE IF NOT EXISTS PERSONAL_INFO (id INTEGER PRIMARY KEY, name, phone, telegram, role, prize)');
-		});
-		// db.transaction(function(trx){
-		// 	trx.executeSql('CREATE TABLE IF NOT EXISTS PRIZE_LIST (name unique, INTEGER amount)');
-		// });
-		return db;
-	};
 
-	var getCurrentUserId = function (data) {
+
+	var getCurrentUserId = function () {
 		const db = initTables();
 
 		return new Promise(function(resolved) {
@@ -86,13 +72,27 @@ var App = function () {
 
 	var insertNewUser = function (data) {
 		const db = initTables();
-		console.log('\n\ndata.name', data.name,'\n\n');
 		return new Promise(resolved => {
 			db.transaction(
 				function(trx){
 					trx.executeSql(`INSERT INTO PERSONAL_INFO (name, phone, telegram, role, prize)
-                VALUES ("${'fsad'}", "${'fsad'}", "${'fsad'}", "${'fadsas'}", "")`)
-                // VALUES ("${data.name}", "${data.phone}", "${data.telegram}", "${data.role}", "")`)
+                VALUES ("${data.name}", "${data.phone}", "${data.telegram}", "${data.role}", "")`)
+				},
+				[],
+				function () {resolved(true);}
+			);
+		})
+
+	};
+
+
+
+	var updateGood = async function (type, nn) {
+		const db = initTables();
+		return new Promise(resolved => {
+			db.transaction(
+				function(trx){
+					trx.executeSql(`UPDATE PERSONAL_INFO SET prize="${type}" WHERE id="${nn}"`)
 				},
 				[],
 				function () {resolved(true);}
@@ -320,7 +320,8 @@ var App = function () {
 			        $('.main').addClass('animate');
 		        }
 	        });
-	        $('#prise__user').html(prizes[number].type)
+	        $('#prise__user').html(prizes[number].type);
+	        return updateGood(prizes[number].type, data).then(() => {});
         }).catch(() => {
 	        pieAmin.animate({
 		        textIndent: -deg
