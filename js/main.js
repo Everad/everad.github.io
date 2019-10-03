@@ -98,13 +98,12 @@ var App = function () {
       group: 1
     }
   };
+  var prizes;
+
 
   function testPrizes(prizes) {
     for (var i = 0; i < prizes.length; i++) {
-      var prize = prizes[i];
-      if (prize.amount > 0) {
-        return true;
-      }
+      if (prizes[i].amount > 0) return true;
     }
     return false;
   }
@@ -115,13 +114,28 @@ var App = function () {
     var random = randomNumberInRange(1, prizes.length);
 
     var amount = prizes[random - 1].amount;
-    if (amount > 0) {
-      return random;
-    } else {
-      return testPrizes(prizes) && getRandomPrize(prizes);
-    }
+
+     return amount > 0 ? random : testPrizes(prizes) && getRandomPrize(prizes);
   };
-  var prizes;
+  //db connections
+  var insertNewUser = function (data) {
+	  const db = openDatabase(
+		  'applicants',
+		  '1.0',
+		  'ApplicantsDb',
+		  2*1024*1024
+	  );
+	  db.transaction(function(trx){
+		  trx.executeSql('CREATE TABLE IF NOT EXISTS PERSONAL_INFO (id unique, log)')
+	  })
+	  db.transaction(function(trx){
+		  trx.executeSql('INSERT INTO LOGS (id, log) VALUES (1, "Log nomer1")')
+	  })
+
+  };
+
+
+
 
   return {
     labelFormActive: function labelFormActive() {
@@ -148,21 +162,31 @@ var App = function () {
             var value = item[1];
             ajaxData[name] = decodeURIComponent(value);
           }
-          $.ajax({
-            type: "PUT",
-            url: "http://localhost:8070/api/users/",
-            contentType: "application/json",
-            data: JSON.stringify(ajaxData),
-            success: function (response) {
-              document.getElementById('wheel__num').innerHTML = `#${response.userId}`;
-              document.cookie = `userId=${response.userId}`;
-              window.userId = response.userId;
-              $('#form').hide();
-              $('.wheel__info').show();
-              $('.wheel__info').css({ 'display': 'flex', 'align-items': 'center' });
-              App.getPrizes();
-            }
-          });
+	        insertNewUser();
+	        // $.ajax({
+          //   type: "PUT",
+          //   url: "http://localhost:8070/api/users/",
+          //   contentType: "application/json",
+          //   data: JSON.stringify(ajaxData),
+          //   success: function (response) {
+          //     document.getElementById('wheel__num').innerHTML = `#${response.userId}`;
+          //     document.cookie = `userId=${response.userId}`;
+          //     window.userId = response.userId;
+          //     $('#form').hide();
+          //     $('.wheel__info').show();
+          //     $('.wheel__info').css({ 'display': 'flex', 'align-items': 'center' });
+          //     App.getPrizes();
+          //   }
+          // });
+
+	        document.getElementById('wheel__num').innerHTML = `#${10001}`;
+	        document.cookie = `userId=${10001}`;
+	        window.userId = 10001;
+	        $('#form').hide();
+	        $('.wheel__info').show();
+	        $('.wheel__info').css({ 'display': 'flex', 'align-items': 'center' });
+	        App.getPrizes();
+
         }
       });
     },
@@ -243,22 +267,29 @@ var App = function () {
       return filteredErrors;
     },
   getPrizes: () => {
-    $.ajax({
-      type: "GET",
-      url: "http://localhost:8070/api/lottery/",
-      success: function (response) {
-        prizes = response;
-        if (!testPrizes(prizes)) {
-          startBtn.addClass('disabled');
-          return;
-        };
-        startBtn.click(function (e) {
-          e.preventDefault();
-          App.startGame();
-        });
-        return;
-      }
-    });
+    // $.ajax({
+    //   type: "GET",
+    //   url: "http://localhost:8070/api/lottery/",
+    //   success: function (response) {
+    //     prizes = response;
+    //     if (!testPrizes(prizes)) {
+    //       startBtn.addClass('disabled');
+    //       return;
+    //     };
+    //
+    //     return;
+    //   }
+    // });
+	  prizes = [{id: 0, amount: 11}, {id: 1, amount: 22}, {id: 2, amount: 25}];
+      console.log('\n\n!testPrizes(prizes)', !testPrizes(prizes),'\n\n');
+	  if(!testPrizes(prizes)){
+		  startBtn.addClass('disabled');
+		  return
+      };
+	  startBtn.click(function (e) {
+		  e.preventDefault();
+		  App.startGame();
+	  });
   },
   startGame: function startGame() {
     formBlock.hide();
@@ -276,12 +307,12 @@ var App = function () {
           $(this).css("transform", "rotate(" + now + "deg)");
         },
         complete: () => {
-          $.ajax({
-            type: "POST",
-            url: "http://localhost:8070/api/users/win",
-            contentType: "application/json",
-            data: JSON.stringify({ prizeId: prizes[number - 1].id, userId })
-          });
+          // $.ajax({
+          //   type: "POST",
+          //   url: "http://localhost:8070/api/users/win",
+          //   contentType: "application/json",
+          //   data: JSON.stringify({ prizeId: prizes[number - 1].id, userId })
+          // });
         }
       });
     },
