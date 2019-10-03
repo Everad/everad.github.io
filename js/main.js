@@ -118,19 +118,59 @@ var App = function () {
      return amount > 0 ? random : testPrizes(prizes) && getRandomPrize(prizes);
   };
   //db connections
-  var insertNewUser = function (data) {
+  var initTable = function () {
 	  const db = openDatabase(
 		  'applicants',
 		  '1.0',
 		  'ApplicantsDb',
-		  2*1024*1024
+		  10*1024*1024
 	  );
 	  db.transaction(function(trx){
-		  trx.executeSql('CREATE TABLE IF NOT EXISTS PERSONAL_INFO (id unique, log)')
-	  })
-	  db.transaction(function(trx){
-		  trx.executeSql('INSERT INTO LOGS (id, log) VALUES (1, "Log nomer1")')
-	  })
+		  trx.executeSql('CREATE TABLE IF NOT EXISTS PERSONAL_INFO (id INTEGER PRIMARY KEY, name, phone, telegram, role, prize)');
+	  });
+	  return db;
+  };
+
+  var getCurrentUserId = function (data) {
+		const db = initTable();
+
+		return new Promise(function(resolved) {
+			db.transaction(function(trx){
+				trx.executeSql('SELECT max(id) FROM PERSONAL_INFO', [], function(tx, result){
+					resolved(result.rows[0]['max(id)']);
+				});
+			});
+        });
+  };
+
+  var validateTelegram = function (data) {
+		const db = initTable();
+
+		return new Promise(function(resolved, rejected) {
+			db.transaction(function(trx){
+				trx.executeSql(`SELECT * FROM PERSONAL_INFO WHERE telegram="${data.telegram}"`, [], function(tx, result){
+					result.rows.length === 0 ? resolved(data) : rejected(`Telegram already exists`);
+				});
+			});
+		});
+  };
+
+  var insertNewUser = function (data) {
+	  const db = initTable();
+	  console.log('\n\ndata.name', data.name,'\n\n');
+	  return new Promise(resolved => {
+		  db.transaction(
+			  function(trx){
+				  trx.executeSql(`INSERT INTO PERSONAL_INFO (name, phone, telegram, role, prize)
+                VALUES ("${data.name}", "${data.phone}", "${data.telegram}", "${data.role}", "")`)
+			  },
+			  [],
+			  function () {resolved(true);}
+		  );
+      })
+	  // db.transaction(function(trx){
+		//   trx.executeSql(`DROP TABLE PERSONAL_INFO`)
+	  // });
 
   };
 
@@ -145,11 +185,16 @@ var App = function () {
       });
     },
     submitHandler: function submitHandler() {
-      form.submit(function (e) {
+      form.submit(async function (e) {
         e.preventDefault();
 
         $(".form_error").remove();
         var errorFields = App.validateForm(form);
+        console.log('\n\nerrorFields', form,'\n\n');
+	    const aa = await validateTelegram(ajaxData);
+        if(!aa || !aa.name) {
+	        errorFields.push({name: 'telegram', group: 1, msg: e});
+        }
         if (errorFields.length) {
           App.showErrorFields(errorFields);
         } else {
@@ -162,7 +207,20 @@ var App = function () {
             var value = item[1];
             ajaxData[name] = decodeURIComponent(value);
           }
-	        insertNewUser();
+          // console.log('\n\najaxData', ajaxData,'\n\n');
+	        validateTelegram(ajaxData)
+                .then(insertNewUser)
+                .catch(e => {
+                    errorFields.push({name: 'telegram', group: 1, msg: e});
+	                App.showErrorFields(errorFields);
+                });
+	        // insertNewUser(ajaxData).then(qq => {});
+	        // getCurrentUserId().then(qq => {
+		     //    console.log('\n\nqq', qq,'\n\n');
+            // }).then(() => {
+            //   return validateTelegram('telegram')
+            // }).then(aa => console.log('\n\naa', aa,'\n\n'))
+
 	        // $.ajax({
           //   type: "PUT",
           //   url: "http://localhost:8070/api/users/",
@@ -267,19 +325,7 @@ var App = function () {
       return filteredErrors;
     },
   getPrizes: () => {
-    // $.ajax({
-    //   type: "GET",
-    //   url: "http://localhost:8070/api/lottery/",
-    //   success: function (response) {
-    //     prizes = response;
-    //     if (!testPrizes(prizes)) {
-    //       startBtn.addClass('disabled');
-    //       return;
-    //     };
-    //
-    //     return;
-    //   }
-    // });
+
 	  prizes = [{id: 0, amount: 11}, {id: 1, amount: 22}, {id: 2, amount: 25}];
       console.log('\n\n!testPrizes(prizes)', !testPrizes(prizes),'\n\n');
 	  if(!testPrizes(prizes)){
