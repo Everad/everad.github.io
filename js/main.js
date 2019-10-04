@@ -95,7 +95,10 @@ var App = function () {
 					trx.executeSql(`UPDATE PERSONAL_INFO SET prize="${type}" WHERE id="${nn}"`)
 				},
 				[],
-				function () {resolved(true);}
+				function () {
+					decreasePrizeAmount(type);
+					resolved(true);
+				}
 			);
 		})
 
@@ -165,6 +168,33 @@ var App = function () {
     count: 200,
     type: "Обнимашки"
   }];
+  //prizes methods
+  var getPrizes = () => {
+	const qq = localStorage.getItem('prizes');
+	  if(!qq) {
+		  localStorage.setItem('prizes', JSON.stringify(prizes))
+	  };
+	  return JSON.parse(localStorage.getItem('prizes'));
+  }
+  var dropPrizes = () => localStorage.removeItem('prizes');
+  var decreasePrizeAmount = prizeType => {
+  	const prizesList = JSON.parse(localStorage.getItem('prizes'))
+	  const currentPrizeIndex = prizesList.findIndex(prz => prz.type === prizeType);
+	  prizesList[currentPrizeIndex].count--;
+	  localStorage.setItem('prizes', JSON.stringify(prizesList))
+
+  }
+  //
+
+  var insertPrizes = () => {
+	  const db = openDatabase(
+		  'applicants',
+		  '1.0',
+		  'ApplicantsDb',
+		  10*1024*1024
+	  );
+  }
+
   return {
     labelFormActive: function labelFormActive() {
       $(".js-input").keyup(function () {
@@ -374,6 +404,7 @@ var App = function () {
     },
     init: function init() {
     	if(window.location.search.includes('clear=true')) {
+		    dropPrizes();
 		    const db = openDatabase(
 			    'applicants',
 			    '1.0',
@@ -384,6 +415,7 @@ var App = function () {
 			    trx.executeSql('DROP TABLE PERSONAL_INFO');
 		    });
 	    }
+	  getPrizes()
       App.labelFormActive();
       App.submitHandler();
       App.startGame();
