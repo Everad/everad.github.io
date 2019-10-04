@@ -4,7 +4,6 @@
     <list default="true" id="9f5c6074-32a9-4aa6-b91f-bf109519c784" name="Default" comment="progress">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,7 +22,6 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>Пуло</find>
-      <find>prizes</find>
       <find>api/u</find>
       <find>Крути</find>
       <find>localh</find>
@@ -36,7 +34,23 @@
       <find>prize__desc</find>
       <find>inser</find>
       <find>Porsche на управлении</find>
+      <find>pri</find>
+      <find>GOODS_AMOUNT</find>
+      <find>db.transaction</find>
+      <find>SELECT * FROM GOODS_AMOUNT</find>
+      <find>SELECT * FROM</find>
+      <find>number</find>
+      <find>getPrizes</find>
+      <find>prizes</find>
+      <find>prizes</find>
+      <find>testPrizes</find>
+      <find>removePrizeFromCount</find>
       <find>getRandomPrize</find>
+      <find>form</find>
+      <find>numeral(</find>
+      <find>10000</find>
+      <find>substr</find>
+      <find>your_id-span</find>
     </findStrings>
     <replaceStrings>
       <replace>initTables</replace>
@@ -108,7 +122,42 @@
       <option name="project" value="LOCAL" />
       <updated>1570109623249</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="progress">
+      <created>1570171864814</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1570171864814</updated>
+    </task>
+    <task id="LOCAL-00004" summary="store current good state">
+      <created>1570175549022</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1570175549022</updated>
+    </task>
+    <task id="LOCAL-00005" summary="minor fix">
+      <created>1570178378084</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1570178378084</updated>
+    </task>
+    <task id="LOCAL-00006" summary="minor fix">
+      <created>1570178820861</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1570178820861</updated>
+    </task>
+    <task id="LOCAL-00007" summary="minor fix">
+      <created>1570179968984</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1570179968984</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -128,6 +177,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add gitignore" />
     <MESSAGE value="progress" />
-    <option name="LAST_COMMIT_MESSAGE" value="progress" />
+    <MESSAGE value="store current good state" />
+    <MESSAGE value="minor fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="minor fix" />
   </component>
 </project>

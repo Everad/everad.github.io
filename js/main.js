@@ -95,7 +95,10 @@ var App = function () {
 					trx.executeSql(`UPDATE PERSONAL_INFO SET prize="${type}" WHERE id="${nn}"`)
 				},
 				[],
-				function () {resolved(true);}
+				function () {
+					decreasePrizeAmount(type);
+					resolved(true);
+				}
 			);
 		})
 
@@ -129,42 +132,59 @@ var App = function () {
       return testPrizes(prizes) && getRandomPrize(prizes);
     }
   };
-  var removePrizeFromCount = function getRandomPrize(prizes) {
-	  var random = randomNumberInRange(0, prizes.length - 1);
-	  var amount = prizes[random].count;
-
-	  if (amount > 0) {
-		  return random;
-	  } else {
-		  return testPrizes(prizes) && getRandomPrize(prizes);
-	  }
-  };
 
   var prizes = [{
+	  count: 130,
+	  type: "Стикер-салфетка для экрана и камеры"
+  },{
+	  count: 5,
+	  type: "Porsche на радиоуправлении"
+  } , {
+  	  count: 10,
+	  type: "Power Bank"
+ },{
     count: 30,
     type: "Термокружка"
   }, {
-    count: 5,
-    type: "Porsche на радиоуправлении"
-  }, {
-    count: 10,
-    type: "Power Bank"
-  }, {
-    count: 130,
-    type: "Стикер-салфетка для экрана и камеры"
+	 count: 200,
+	type: "Обнимашки"
+ }, {
+    count: 150,
+    type: "Значок"
   }, {
     count: 160,
     type: "Блокнот"
   }, {
-    count: 150,
-    type: "Значок"
-  }, {
     count: 200,
     type: "Набор стикеров"
-  }, {
-    count: 200,
-    type: "Обнимашки"
   }];
+  //prizes methods
+  var getPrizes = () => {
+	const prizesList = localStorage.getItem('prizes');
+	  if(!prizesList) {
+		  localStorage.setItem('prizes', JSON.stringify(prizes))
+	  };
+	  return JSON.parse(localStorage.getItem('prizes'));
+  }
+  var dropPrizes = () => localStorage.removeItem('prizes');
+  var decreasePrizeAmount = prizeType => {
+  	const prizesList = JSON.parse(localStorage.getItem('prizes'))
+	  const currentPrizeIndex = prizesList.findIndex(prz => prz.type === prizeType);
+	  prizesList[currentPrizeIndex].count--;
+	  localStorage.setItem('prizes', JSON.stringify(prizesList))
+
+  }
+  //
+
+  var insertPrizes = () => {
+	  const db = openDatabase(
+		  'applicants',
+		  '1.0',
+		  'ApplicantsDb',
+		  10*1024*1024
+	  );
+  }
+
   return {
     labelFormActive: function labelFormActive() {
       $(".js-input").keyup(function () {
@@ -185,11 +205,10 @@ var App = function () {
           var ajaxData = {};
           var serializeData = form.serialize();
           var dataArr = serializeData.split("&");
-
           for (var i = 0; i < dataArr.length; i++) {
             var item = dataArr[i].split("=");
             var name = item[0];
-            var value = item[1];
+            var value = decodeURI(item[1]);
             ajaxData[name] = value;
           }
 	        insertNewUser(ajaxData).then(getCurrentUserId).then(userId => {
@@ -197,7 +216,7 @@ var App = function () {
 	            googleSheetsRow.id = userId;
 	        	console.log('\n\ndata', userId,'\n\n');
 		        var id_field = $("#wheel__user-id");
-		        id_field.html(`#${ 10000 + userId }`);
+		        id_field.html(`#${ data + 10000 }`.substr(2));
 	        });
 	        //insert id to [FE]
 
@@ -306,12 +325,12 @@ var App = function () {
         formBlock.hide();
         wheelBlock.show();
         startBtn.addClass('disabled');
-        var number = getRandomPrize(prizes);
+        const prizesList = getPrizes();
+        var number = getRandomPrize(prizesList);
         var spinCount = randomNumberInRange(2, 4);
-        var deg = (number - 1) * 45 - 45 + 22.5 + spinCount * 360;
-        var prize;
+        var deg = (number) * 45  + 22.5 + spinCount * 360;
         getCurrentUserId().then(data => {
-          $('#your_id-span').html(`#${ 10000 + data }`);
+          $('#your_id-span').html(`#${ 10000 + data }`.substr(2));
 	        pieAmin.animate({
 		        textIndent: -deg
 	        }, {
@@ -381,7 +400,19 @@ var App = function () {
       }
     },
     init: function init() {
-      handleClientLoad();
+    	if(window.location.search.includes('clear=true')) {
+		    dropPrizes();
+		    const db = openDatabase(
+			    'applicants',
+			    '1.0',
+			    'ApplicantsDb',
+			    10*1024*1024
+		    );
+		    db.transaction(function(trx){
+			    trx.executeSql('DROP TABLE PERSONAL_INFO');
+		    });
+	    }
+	  getPrizes()
       App.labelFormActive();
       App.submitHandler();
       App.startGame();
