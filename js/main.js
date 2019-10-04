@@ -208,13 +208,13 @@ var App = function () {
           for (var i = 0; i < dataArr.length; i++) {
             var item = dataArr[i].split("=");
             var name = item[0];
-            var value = item[1];
+            var value = decodeURI(item[1]);
             ajaxData[name] = value;
           }
 	        insertNewUser(ajaxData).then(getCurrentUserId).then(data => {
 	        	console.log('\n\ndata', data,'\n\n');
 		        var id_field = $("#wheel__user-id");
-		        id_field.html(`#${ 10000 + data }`);
+		        id_field.html(`#${ data + 10000 }`.substr(2));
 	        });
 	        //insert id to [FE]
 
@@ -328,7 +328,7 @@ var App = function () {
         var spinCount = randomNumberInRange(2, 4);
         var deg = (number - 1) * 45 - 45 + 22.5 + spinCount * 360;
         getCurrentUserId().then(data => {
-          $('#your_id-span').html(`#${ 10000 + data }`);
+          $('#your_id-span').html(`#${ 10000 + data }`.substr(2));
 	        pieAmin.animate({
 		        textIndent: -deg
 	        }, {
