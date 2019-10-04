@@ -29,8 +29,8 @@
       <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365">
-              <caret line="98" column="44" selection-start-line="98" selection-start-column="44" selection-end-line="98" selection-end-column="44" />
+            <state relative-caret-position="131">
+              <caret line="323" column="26" lean-forward="true" selection-start-line="323" selection-start-column="26" selection-end-line="323" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -68,14 +68,18 @@
       <find>prize__desc</find>
       <find>inser</find>
       <find>Porsche на управлении</find>
-      <find>getRandomPrize</find>
       <find>pri</find>
       <find>GOODS_AMOUNT</find>
       <find>db.transaction</find>
       <find>SELECT * FROM GOODS_AMOUNT</find>
       <find>SELECT * FROM</find>
+      <find>number</find>
       <find>getPrizes</find>
       <find>prizes</find>
+      <find>prizes</find>
+      <find>testPrizes</find>
+      <find>removePrizeFromCount</find>
+      <find>getRandomPrize</find>
     </findStrings>
     <replaceStrings>
       <replace>initTables</replace>
@@ -197,11 +201,25 @@
       <option name="project" value="LOCAL" />
       <updated>1570171864814</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="store current good state">
+      <created>1570175549022</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1570175549022</updated>
+    </task>
+    <task id="LOCAL-00005" summary="minor fix">
+      <created>1570178378084</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1570178378084</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="16035000" />
+    <option name="totallyTimeSpent" value="18435000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="55" y="-5" width="1865" height="1085" extended-state="6" />
@@ -238,7 +256,9 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add gitignore" />
     <MESSAGE value="progress" />
-    <option name="LAST_COMMIT_MESSAGE" value="progress" />
+    <MESSAGE value="store current good state" />
+    <MESSAGE value="minor fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="minor fix" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/.gitignore">
@@ -593,8 +613,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="98" column="44" selection-start-line="98" selection-start-column="44" selection-end-line="98" selection-end-column="44" />
+        <state relative-caret-position="131">
+          <caret line="323" column="26" lean-forward="true" selection-start-line="323" selection-start-column="26" selection-end-line="323" selection-end-column="26" />
         </state>
       </provider>
     </entry>

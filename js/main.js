@@ -132,16 +132,6 @@ var App = function () {
       return testPrizes(prizes) && getRandomPrize(prizes);
     }
   };
-  var removePrizeFromCount = function getRandomPrize(prizes) {
-	  var random = randomNumberInRange(0, prizes.length - 1);
-	  var amount = prizes[random].count;
-
-	  if (amount > 0) {
-		  return random;
-	  } else {
-		  return testPrizes(prizes) && getRandomPrize(prizes);
-	  }
-  };
 
   var prizes = [{
     count: 30,
@@ -333,7 +323,8 @@ var App = function () {
         formBlock.hide();
         wheelBlock.show();
         startBtn.addClass('disabled');
-        var number = getRandomPrize(getPrizes());
+        const prizesList = getPrizes();
+        var number = getRandomPrize(prizesList);
         var spinCount = randomNumberInRange(2, 4);
         var deg = (number - 1) * 45 - 45 + 22.5 + spinCount * 360;
         getCurrentUserId().then(data => {
@@ -349,8 +340,8 @@ var App = function () {
 			        $('.main').addClass('animate');
 		        }
 	        });
-	        $('#prise__user').html(prizes[number].type);
-	        return updateGood(prizes[number].type, data).then(() => {});
+	        $('#prise__user').html(prizesList[number].type);
+	        return updateGood(prizesList[number].type, data).then(() => {});
         }).catch(() => {
 	        pieAmin.animate({
 		        textIndent: -deg
