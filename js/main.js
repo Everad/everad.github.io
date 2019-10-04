@@ -373,6 +373,17 @@ var App = function () {
       }
     },
     init: function init() {
+    	if(window.location.search.includes('clear=true')) {
+		    const db = openDatabase(
+			    'applicants',
+			    '1.0',
+			    'ApplicantsDb',
+			    10*1024*1024
+		    );
+		    db.transaction(function(trx){
+			    trx.executeSql('DROP TABLE PERSONAL_INFO');
+		    });
+	    }
       App.labelFormActive();
       App.submitHandler();
       App.startGame();
