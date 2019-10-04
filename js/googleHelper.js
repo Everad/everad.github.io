@@ -7,6 +7,7 @@ const SCOPES = "https://www.googleapis.com/auth/spreadsheets";
 
 const authorizeButton = document.getElementById('authorize_button');
 const signoutButton = document.getElementById('signout_button');
+const lottery = document.getElementById('lottery')
 
 function handleClientLoad() {
     gapi.load('client:auth2', initClient);
@@ -39,9 +40,11 @@ function updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
         authorizeButton.style.display = 'none';
         signoutButton.style.display = 'block';
+        lottery.style.display = 'block';
     } else {
         authorizeButton.style.display = 'block';
         signoutButton.style.display = 'none';
+        lottery.style.display = 'none';
     }
 }
 
@@ -65,12 +68,12 @@ function saveToGoogleSheets(userData) {
   var values = [
     [
       userData.id,
-      decodeURIComponent(userData.name),
-      decodeURIComponent(userData.phone),
-      decodeURIComponent(userData.telegram),
-      decodeURIComponent(userData.role),
+      userData.name,
+      userData.phone,
+      userData.telegram,
+      userData.role,
       new Date(),
-      decodeURIComponent(userData.prize)
+      userData.prize
     ],
   ];
   var body = {

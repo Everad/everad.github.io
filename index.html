@@ -23,7 +23,6 @@
   <section class="top">
      <div class="container">
        <button id="signout_button" style="display: none;">Sign Out</button>
-       <button id="authorize_button" style="display: none;">Authorize</button>
         <div class="top__content">
            <div class="top__logo">
               <img src="img/svg/everad.svg" alt="logo-everad">
@@ -31,15 +30,16 @@
            <p class="top__text">
              Лотерея
             </p>
+            <button id="authorize_button" style="display: none;" class="top__login btn">Log in</button>
         </div>
      </div>
   </section>
-  <section class="main">
+  <section id="lottery" class="main" style="display: none">
      <div class="container">
         <div class="main__content">
            <div class="form mr" id="form">
               <h2 class="form__title">Регистрация</h2>
-              <form class="form__registration" id="registration_form"">
+              <form class="form__registration" id="registration_form">
                           <div class=" input">
                  <input class="input__form js-input" id="first_name" name="name" type="text">
                  <label class="input__label" id="label-name">Имя</label>
@@ -64,7 +64,7 @@
         </div>
         <div class="wheel__info">
            <div class="left">
-              <p class="wheel__num" id="wheel__user-id">#59237</p>
+              <p class="wheel__num" id="wheel__user-id">#</p>
               <h2 class="wheel__title">Свою&nbsp;удачу испытай – подарок забирай</h2>
               <div class="btn wheel__btn start-btn">Крутить барабан</div>
               <p class="wheel__note"><span class="star">*</span> Один участник может<br> крутить один раз</p>

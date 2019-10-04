@@ -208,15 +208,16 @@ var App = function () {
           for (var i = 0; i < dataArr.length; i++) {
             var item = dataArr[i].split("=");
             var name = item[0];
-            var value = decodeURI(item[1]);
+            var value = decodeURIComponent(item[1]);
             ajaxData[name] = value;
           }
 	        insertNewUser(ajaxData).then(getCurrentUserId).then(userId => {
                 Object.assign(googleSheetsRow, ajaxData);
-	            googleSheetsRow.id = userId;
 	        	console.log('\n\ndata', userId,'\n\n');
 		        var id_field = $("#wheel__user-id");
-		        id_field.html(`#${ data + 10000 }`.substr(2));
+		        var idString = ("000" + userId).slice(-4);
+	            googleSheetsRow.id = idString;
+		        id_field.html("#"+idString);
 	        });
 	        //insert id to [FE]
 
@@ -342,7 +343,7 @@ var App = function () {
 			        $('.main').addClass('animate');
 		        }
 	        });
-	        prize = prizes[number].type;
+            const prize = prizes[number].type;
 	        $('#prise__user').html(prize);
 	        return updateGood(prize, data).then(() => {
                 googleSheetsRow.prize = prize;
@@ -413,6 +414,7 @@ var App = function () {
 		    });
 	    }
 	  getPrizes()
+        handleClientLoad();
       App.labelFormActive();
       App.submitHandler();
       App.startGame();
