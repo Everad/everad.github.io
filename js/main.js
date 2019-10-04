@@ -170,8 +170,8 @@ var App = function () {
   }];
   //prizes methods
   var getPrizes = () => {
-	const qq = localStorage.getItem('prizes');
-	  if(!qq) {
+	const prizesList = localStorage.getItem('prizes');
+	  if(!prizesList) {
 		  localStorage.setItem('prizes', JSON.stringify(prizes))
 	  };
 	  return JSON.parse(localStorage.getItem('prizes'));
@@ -215,7 +215,6 @@ var App = function () {
           var ajaxData = {};
           var serializeData = form.serialize();
           var dataArr = serializeData.split("&");
-
           for (var i = 0; i < dataArr.length; i++) {
             var item = dataArr[i].split("=");
             var name = item[0];
@@ -334,7 +333,7 @@ var App = function () {
         formBlock.hide();
         wheelBlock.show();
         startBtn.addClass('disabled');
-        var number = getRandomPrize(prizes);
+        var number = getRandomPrize(getPrizes());
         var spinCount = randomNumberInRange(2, 4);
         var deg = (number - 1) * 45 - 45 + 22.5 + spinCount * 360;
         getCurrentUserId().then(data => {
