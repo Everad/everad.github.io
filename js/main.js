@@ -1,6 +1,5 @@
 "use strict";
 
-
 var App = function () {
   "use strict";
 
@@ -10,6 +9,7 @@ var App = function () {
   var pie = wheelBlock.find(".pie");
   var pieAmin = $('.wheel__pie');
   var formBlock = $("#form");
+  var googleSheetsRow = {};
   var errorMessages = {
     name: {
       regExp: /([A-Za-zА-ЯЄІЇа-яєії])+$/,
@@ -70,7 +70,7 @@ var App = function () {
 	};
 
 
-	var insertNewUser = function (data) {
+        var insertNewUser = function (data) {
 		const db = initTables();
 		return new Promise(resolved => {
 			db.transaction(
@@ -192,10 +192,12 @@ var App = function () {
             var value = item[1];
             ajaxData[name] = value;
           }
-	        insertNewUser(ajaxData).then(getCurrentUserId).then(data => {
-	        	console.log('\n\ndata', data,'\n\n');
+	        insertNewUser(ajaxData).then(getCurrentUserId).then(userId => {
+                Object.assign(googleSheetsRow, ajaxData);
+	            googleSheetsRow.id = userId;
+	        	console.log('\n\ndata', userId,'\n\n');
 		        var id_field = $("#wheel__user-id");
-		        id_field.html(`#${ 10000 + data }`);
+		        id_field.html(`#${ 10000 + userId }`);
 	        });
 	        //insert id to [FE]
 
@@ -307,6 +309,7 @@ var App = function () {
         var number = getRandomPrize(prizes);
         var spinCount = randomNumberInRange(2, 4);
         var deg = (number - 1) * 45 - 45 + 22.5 + spinCount * 360;
+        var prize;
         getCurrentUserId().then(data => {
           $('#your_id-span').html(`#${ 10000 + data }`);
 	        pieAmin.animate({
@@ -320,8 +323,13 @@ var App = function () {
 			        $('.main').addClass('animate');
 		        }
 	        });
-	        $('#prise__user').html(prizes[number].type);
-	        return updateGood(prizes[number].type, data).then(() => {});
+	        prize = prizes[number].type;
+	        $('#prise__user').html(prize);
+	        return updateGood(prize, data).then(() => {
+                googleSheetsRow.prize = prize;
+                console.log('calling')
+                saveToGoogleSheets(googleSheetsRow);
+            });
         }).catch(() => {
 	        pieAmin.animate({
 		        textIndent: -deg
@@ -373,6 +381,7 @@ var App = function () {
       }
     },
     init: function init() {
+      handleClientLoad();
       App.labelFormActive();
       App.submitHandler();
       App.startGame();
