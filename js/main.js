@@ -134,29 +134,29 @@ var App = function () {
   };
 
   var prizes = [{
+	  count: 130,
+	  type: "Стикер-салфетка для экрана и камеры"
+  },{
+	  count: 5,
+	  type: "Porsche на радиоуправлении"
+  } , {
+  	  count: 10,
+	  type: "Power Bank"
+ },{
     count: 30,
     type: "Термокружка"
   }, {
-    count: 5,
-    type: "Porsche на радиоуправлении"
-  }, {
-    count: 10,
-    type: "Power Bank"
-  }, {
-    count: 130,
-    type: "Стикер-салфетка для экрана и камеры"
+	 count: 200,
+	type: "Обнимашки"
+ }, {
+    count: 150,
+    type: "Значок"
   }, {
     count: 160,
     type: "Блокнот"
   }, {
-    count: 150,
-    type: "Значок"
-  }, {
     count: 200,
     type: "Набор стикеров"
-  }, {
-    count: 200,
-    type: "Обнимашки"
   }];
   //prizes methods
   var getPrizes = () => {
@@ -326,7 +326,7 @@ var App = function () {
         const prizesList = getPrizes();
         var number = getRandomPrize(prizesList);
         var spinCount = randomNumberInRange(2, 4);
-        var deg = (number - 1) * 45 - 45 + 22.5 + spinCount * 360;
+        var deg = (number) * 45  + 22.5 + spinCount * 360;
         getCurrentUserId().then(data => {
           $('#your_id-span').html(`#${ 10000 + data }`.substr(2));
 	        pieAmin.animate({
