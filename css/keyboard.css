@@ -335,3 +335,9 @@ button.ui-keyboard-extender span {
 		padding: 0.5em 0;
 	}
 }
+
+.ui-keyboard{
+	top: calc(100vh - 220px) !important;
+	width: 40vw !important;
+	left: calc(30vw) !important;
+}
