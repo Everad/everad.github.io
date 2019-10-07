@@ -322,6 +322,10 @@ textarea:-webkit-autofill:hover {
   width: 100%;
   margin: 47px auto auto
 }
+#start_to_play.disabled{
+  pointer-events: none;
+  background: grey
+}
 
 .input {
   position: relative

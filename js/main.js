@@ -173,8 +173,8 @@ var App = function () {
             form.submit(function (e) {
                 e.preventDefault();
                 $(".form_error").remove();
-                // var errorFields = App.validateForm(form);
-                var errorFields = [];
+                var errorFields = App.validateForm(form);
+                // var errorFields = [];
 
                 if (errorFields.length) {
                     App.showErrorFields(errorFields);
@@ -404,6 +404,9 @@ var App = function () {
                 db.transaction(function (trx) {
                     trx.executeSql('DROP TABLE PERSONAL_INFO');
                 });
+            }
+            if(!JSON.parse(localStorage.getItem('gifts')).length) {
+	            $('#start_to_play').addClass('disabled');
             }
             getGifts();
             handleClientLoad();
