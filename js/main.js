@@ -173,8 +173,8 @@ var App = function () {
             form.submit(function (e) {
                 e.preventDefault();
                 $(".form_error").remove();
-                // var errorFields = App.validateForm(form);
-                var errorFields = [];
+                var errorFields = App.validateForm(form);
+                // var errorFields = [];
 
                 if (errorFields.length) {
                     App.showErrorFields(errorFields);
@@ -190,7 +190,6 @@ var App = function () {
                     }
                     insertNewUser(ajaxData).then(getCurrentUserId).then(userId => {
                         Object.assign(googleSheetsRow, ajaxData);
-                        console.log('\n\ndata', userId, '\n\n');
                         var id_field = $("#wheel__user-id");
                         var idString = ("000" + userId).slice(-4);
                         googleSheetsRow.id = idString;
@@ -312,6 +311,8 @@ var App = function () {
                 const sectorNumber = gifts.findIndex(item => item.type === gift);
                 var spinCount = randomNumberInRange(4, 8);
                 var deg = (sectorNumber) * 45 + 22.5 + spinCount * 360;
+                console.log('\n\ndeg', deg,'\n\n');
+                console.log('\n\nspinCount', spinCount,'\n\n');
                 getCurrentUserId().then(userId => {
                     $('#your_id-span').html(`#${10000 + userId}`.substr(2));
                     pieAmin.animate({
@@ -349,13 +350,14 @@ var App = function () {
         },
         anewStartGame: function anewStartGame() {
             $('.js-anew').click(function (e) {
-                e.preventDefault();
-                $('.main').removeClass('animate');
-                startBtn.removeClass('disabled');
-                $('#form').show();
-                $('#form').find("input[type=text], input[type=tel]").val("");
-                $(".js-input").removeClass('active');
-                $('.wheel__info').hide();
+                // e.preventDefault();
+                // $('.main').removeClass('animate');
+                // startBtn.removeClass('disabled');
+                // $('#form').show();
+                // $('#form').find("input[type=text], input[type=tel]").val("");
+                // $(".js-input").removeClass('active');
+                // $('.wheel__info').hide();
+	            location.reload(true);
             });
         },
         pieDraw: function pieDraw() {
