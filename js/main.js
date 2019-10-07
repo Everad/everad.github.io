@@ -309,6 +309,7 @@ var App = function () {
                 const giftIndex = randomNumberInRange(0, giftList.length - 1);
                 const gift = giftList[giftIndex];
                 const sectorNumber = gifts.findIndex(item => item.type === gift);
+                $('.prize__img').attr("src",`img/svg/icon_${sectorNumber + 1}.svg`);
                 var spinCount = randomNumberInRange(4, 8);
                 var deg = (sectorNumber) * 45 + 22.5 + spinCount * 360;
                 getCurrentUserId().then(userId => {
