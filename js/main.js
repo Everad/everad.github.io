@@ -405,11 +405,12 @@ var App = function () {
                     trx.executeSql('DROP TABLE PERSONAL_INFO');
                 });
             }
-            if(!JSON.parse(localStorage.getItem('gifts')).length) {
-	            $('#start_to_play').addClass('disabled');
-            }
             getGifts();
             handleClientLoad();
+	        if(!JSON.parse(localStorage.getItem('gifts')).length) {
+		        $('#start_to_play').addClass('disabled');
+	        }
+
             App.labelFormActive();
             App.submitHandler();
             App.startGame();
