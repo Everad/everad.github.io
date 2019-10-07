@@ -73,7 +73,7 @@ function saveToGoogleSheets(userData) {
       userData.telegram,
       userData.role,
       new Date(),
-      userData.prize
+      userData.gift
     ],
   ];
   var body = {
