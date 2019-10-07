@@ -173,8 +173,8 @@ var App = function () {
             form.submit(function (e) {
                 e.preventDefault();
                 $(".form_error").remove();
-                var errorFields = App.validateForm(form);
-                // var errorFields = [];
+                // var errorFields = App.validateForm(form);
+                var errorFields = [];
 
                 if (errorFields.length) {
                     App.showErrorFields(errorFields);
