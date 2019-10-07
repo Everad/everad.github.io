@@ -306,13 +306,11 @@ var App = function () {
                 if (!giftList.length) {
                     alert("There are no gifts left")
                 }
-                const giftIndex = randomNumberInRange(0, giftList.length);
+                const giftIndex = randomNumberInRange(0, giftList.length - 1);
                 const gift = giftList[giftIndex];
                 const sectorNumber = gifts.findIndex(item => item.type === gift);
                 var spinCount = randomNumberInRange(4, 8);
                 var deg = (sectorNumber) * 45 + 22.5 + spinCount * 360;
-                console.log('\n\ndeg', deg,'\n\n');
-                console.log('\n\nspinCount', spinCount,'\n\n');
                 getCurrentUserId().then(userId => {
                     $('#your_id-span').html(`#${10000 + userId}`.substr(2));
                     pieAmin.animate({
