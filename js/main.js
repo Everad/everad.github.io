@@ -51,7 +51,7 @@ var App = function () {
         return new Promise(function (resolved) {
             db.transaction(function (trx) {
                 trx.executeSql('SELECT max(id) FROM PERSONAL_INFO', [], function (tx, result) {
-                    resolved(result.rows[0]['max(id)']);
+                    resolved(result.rows[0]['max(id)'] + 162);
                 });
             });
         });
