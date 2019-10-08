@@ -1,26 +1,26 @@
 const gifts = [
     {
-        count: 130,
+        count: 50,
         type: "Стикер-салфетка для экрана и камеры"
     }, {
         count: 5,
         type: "Porsche на радиоуправлении"
     }, {
-        count: 10,
+        count: 9,
         type: "Power Bank"
     }, {
-        count: 30,
+        count: 25,
         type: "Термокружка"
     }, {
-        count: 200,
+        count: 0,
         type: "Обнимашки"
     }, {
-        count: 150,
+        count: 50,
         type: "Значок"
     }, {
-        count: 160,
+        count: 80,
         type: "Блокнот"
     }, {
-        count: 200,
+        count: 0,
         type: "Набор стикеров"
     }];
